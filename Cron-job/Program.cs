@@ -14,7 +14,7 @@ class Program
 {
     private static readonly string organization = "hello-radio-meter-world";
     private static readonly string project = "HelloWolrd";
-    private static readonly string personalAccessToken = "7vwf12HdEOVVPeRmWSW1JuVaDiBSIm2ZA9CgAngVjtKPOpJxFBkUJQQJ99BJACAAAAAAAAAAAAASAZDO2FB2";
+    private static readonly string personalAccessToken = Environment.GetEnvironmentVariable("AZURE_PAT");
     private static readonly string apiVersion = "7.2-preview";
     private static readonly int maxBatchSize = 200;
 
@@ -77,21 +77,21 @@ class Program
             {
                 int id = item.GetProperty("id").GetInt32();
 
-                if(!item.GetProperty("fields").TryGetProperty("System.Title", out JsonElement titleProp))
+                if (!item.GetProperty("fields").TryGetProperty("System.Title", out JsonElement titleProp))
                 {
                     continue;
                 }
 
                 string title = titleProp.GetString()!;
 
-                if(!item.GetProperty("fields").TryGetProperty("System.State", out JsonElement stateProp))
+                if (!item.GetProperty("fields").TryGetProperty("System.State", out JsonElement stateProp))
                 {
                     continue;
                 }
 
                 string state = stateProp.GetString()!;
 
-                if(!item.GetProperty("fields").TryGetProperty("System.Tags", out JsonElement tagsProp))
+                if (!item.GetProperty("fields").TryGetProperty("System.Tags", out JsonElement tagsProp))
                 {
                     continue;
                 }
