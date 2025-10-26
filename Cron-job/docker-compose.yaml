@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  hwdb:
+    image: postgres:17-alpine
+    container_name: hw-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: hwdb123
+      POSTGRES_DB: hwdb
+    ports:
+      - '2345:5432'
+    volumes:
+      - ./db-script.sql:/docker-entrypoint-initdb.d/db-script.sql
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - db
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d postgres" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  db:
+    driver: bridge
+
+volumes:
+  db-data:
