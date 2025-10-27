@@ -16,14 +16,12 @@ class Program
 {
     private static readonly string organization = "hello-radio-meter-world";
     private static readonly string project = "HelloWolrd";
-    //private static readonly string personalAccessToken = Environment.GetEnvironmentVariable("AZURE_PAT");
     private static readonly string apiVersion = "7.2-preview";
     private static readonly int maxBatchSize = 200;
 
     static async Task Main()
     {
         string? personalAccessToken = ConfigurationManager.AppSettings["AZURE_PAT"] ?? null;
-
 
         using var client = new HttpClient();
         client.DefaultRequestHeaders.Accept.Add(
