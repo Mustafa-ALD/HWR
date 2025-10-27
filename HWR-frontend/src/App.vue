@@ -1,26 +1,83 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { onMounted, ref } from 'vue'
+import axios from 'axios'
+
+const bugs = ref(0)
+const features = ref(0)
+
+onMounted(async () => {
+  let url = 'http://localhost:5169/work-items'
+  let headers = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json;charset=UTF-8',
+  }
+  let response = await axios.get(url, headers)
+  let responseOK = response && response.status === 200 && response.statusText === 'OK'
+  
+  if (responseOK) {
+    let data = await response.data
+    for(const entry of data) {
+      if (entry.tag === "Feature") {
+        features.value++
+      } else if (entry.tag === "Bug") {
+        bugs.value++
+      }
+    }
+  }
+})
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+    <div class="outer">
+      <h1>Dashboard</h1>
+      <div class="counters-box">
+        <div class="box">
+          <span class="box-title">Bugs</span>
+          <span class="box-number">{{ bugs }}</span>
+        </div>
+        <div class="box">
+          <span class="box-title">Features</span>
+          <span class="box-number">{{ features }}</span>
+        </div>
+      </div>
     </div>
   </header>
-
-  <RouterView />
 </template>
 
 <style scoped>
+.box-title {
+  font-size: medium;
+  font-weight: 500;
+}
+.box-number {
+  font-weight: bold;
+  font-size: larger;
+}
+.box {
+  border-radius: 20px;
+  border: 1px solid darkgrey;
+  padding: 5px 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.counters-box{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.outer{
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ flex-direction: column;
+ gap: 8px;
+}
+
 header {
   line-height: 1.5;
   max-height: 100vh;
